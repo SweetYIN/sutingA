@@ -416,6 +416,7 @@ public class ConnectDeviceActivity extends BaseActivity implements View.OnClickL
                    myDeviceRecyclerViewAdapter.notifyDataSetChanged();
                }
 
+
 //               ttLockAPI.setLockTime(null, uid, lockResponsesBean.getData().getLockVersion(), lockResponsesBean.getData().getLockKey(), System.currentTimeMillis(), lockResponsesBean.getData().getLockFlagPos(), lockResponsesBean.getData().getAesKeyStr(), lockResponsesBean.getData().getTimezoneRawOffset());
 
 
