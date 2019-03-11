@@ -116,7 +116,7 @@ public class HouseFragment extends Fragment implements BGARefreshLayout.BGARefre
     private ClickCallback mClickCallback = new ClickCallback() {
         @Override
         public void ItemOnClick(View v, int position) {
-            uploadData(houseInfos.get(position).getHouse().getId());
+            uploadData(houseInfos.get(position).getRoomId());
         }
 
         @Override
@@ -226,6 +226,7 @@ public class HouseFragment extends Fragment implements BGARefreshLayout.BGARefre
 
                     @Override
                     public void onNext(List<RoomSearchResponses> value) {
+                        houseInfos.clear();
                         houseInfos.addAll(value) ;
                         myRecyclerViewAdapter.notifyDataSetChanged();
                         tabBadgeClickCallback.onData(0,value.size());

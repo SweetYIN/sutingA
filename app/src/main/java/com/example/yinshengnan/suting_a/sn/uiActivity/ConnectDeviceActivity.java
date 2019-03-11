@@ -17,6 +17,7 @@ import android.widget.ListView;
 
 import com.example.yinshengnan.suting_a.R;
 import com.example.yinshengnan.suting_a.sn.adapter.MyDeviceRecyclerViewAdapter;
+import com.example.yinshengnan.suting_a.sn.bean.JSONUtils;
 import com.example.yinshengnan.suting_a.sn.bean.Request.LockFormRequest;
 import com.example.yinshengnan.suting_a.sn.bean.Responds.ChangeStateResetResponses;
 import com.example.yinshengnan.suting_a.sn.bean.Responds.RoomSearchResponses;
@@ -72,7 +73,7 @@ public class ConnectDeviceActivity extends BaseActivity implements View.OnClickL
 
     private String lockName;
     private String password;
-
+    private  int i = 0;
 
 
     @Override
@@ -85,7 +86,10 @@ public class ConnectDeviceActivity extends BaseActivity implements View.OnClickL
         bindid = getIntent().getIntExtra("ID",0);
         }else if ("2".equals(Type)){
             roomSearchResponses = (RoomSearchResponses)getIntent().getSerializableExtra("roomSearchResponses");
+//            Log.e(TAG,"PWAS ="+roomSearchResponses.getRoomId());
 //            getpassword();
+            Log.e(TAG,"size ="+ roomSearchResponses.getLockViewList().size());
+//            Log.e(TAG,"json ="+ JSONUtils.tojson());
 
         }
         Log.e(TAG,"Type ="+Type);
@@ -152,6 +156,11 @@ public class ConnectDeviceActivity extends BaseActivity implements View.OnClickL
         switch (v.getId()){
             case R.id.ib_scanDevice:
 //                DeletePassword();
+//                for (int i = 0;i < roomSearchResponses.getLockViewList().size();i++){
+//                 password = roomSearchResponses.getLockViewList().get(0).getKeyboardPwd();
+//                 lockData = roomSearchResponses.getLockViewList().get(0).getLock();
+//                    ttLockAPI.connect(roomSearchResponses.getLockViewList().get(0).getLock().getData().getLockMac());
+//                }
                 scanBle();
                 break;
         }
@@ -161,6 +170,7 @@ public class ConnectDeviceActivity extends BaseActivity implements View.OnClickL
     private void scanBle() {
 
         if(requestPermission(Manifest.permission.ACCESS_COARSE_LOCATION)) {
+
             ttLockAPI.startBTDeviceScan();
         }else{
             toast("权限没有打开");
@@ -176,8 +186,9 @@ public class ConnectDeviceActivity extends BaseActivity implements View.OnClickL
      * update scan device
      * @param extendedBluetoothDevice
      */
+
     public void updateDevice(ExtendedBluetoothDevice extendedBluetoothDevice) {
-        Log.e(TAG,"size"+devices.size()+"\nisSettingMode ="+extendedBluetoothDevice.isSettingMode()+"Type = "+Type);
+//        Log.e(TAG,"size"+devices.size()+"\nisSettingMode ="+extendedBluetoothDevice.isSettingMode()+"Type = "+Type);
         for(int i = 0; i < devices.size() ;i++) {
             if(devices.contains(extendedBluetoothDevice)) {
 
@@ -185,12 +196,20 @@ public class ConnectDeviceActivity extends BaseActivity implements View.OnClickL
             }
         }
         if ("2".equals(Type)){
-
-            for (int i = 0;i <roomSearchResponses.getLockViewList().size();i++){
+//            Log.e(TAG,"extendedBluetoothDevice.getAddress() = "+extendedBluetoothDevice.getAddress()+"Mac = "+roomSearchResponses.getLockViewList().get(i).getLock().getData().getLockMac());
+//            devices.add(extendedBluetoothDevice);
                 if (extendedBluetoothDevice.getAddress().equals(roomSearchResponses.getLockViewList().get(i).getLock().getData().getLockMac())){
+                    Log.e(TAG,"\ni ="+extendedBluetoothDevice.getAddress());
                     devices.add(extendedBluetoothDevice);
+
+                    if (i < roomSearchResponses.getLockViewList().size()){
+                        i++;
+                    }
+                    if (i == roomSearchResponses.getLockViewList().size()){
+//                        showBle();
+                    }
+
                 }
-            }
 
 
         }else{
@@ -208,19 +227,21 @@ public class ConnectDeviceActivity extends BaseActivity implements View.OnClickL
         }
 
 
-        runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Log.e(TAG,"size"+devices.size());
-                    myDeviceRecyclerViewAdapter.notifyDataSetChanged();
-                }
-            });
+        showBle();
 
     }
 
+    private void showBle(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+//
+                myDeviceRecyclerViewAdapter.notifyDataSetChanged();
+            }
+        });
+    }
 
-
-
+    private int positionId;
     private ClickCallback itemClickCallback = new ClickCallback() {
         @Override
         public void ItemOnClick(View v, int position) {
@@ -232,11 +253,13 @@ public class ConnectDeviceActivity extends BaseActivity implements View.OnClickL
             ttLockAPI.stopBTDeviceScan();
             Log.e(TAG,"position = "+position);
 
+//            ttLockAPI.resetLock();
             if ("1".equals(Type)){
             startAlertDialog("请输入锁的别名","取消","确定",position);
 //            ttLockAPI.connect(devices.get(position));
             }else if("2".equals(Type)){
                 showProgressDialog();
+                positionId = position;
                 password = roomSearchResponses.getLockViewList().get(position).getKeyboardPwd();
                 lockData = roomSearchResponses.getLockViewList().get(position).getLock();
                 Log.e(TAG,"position = "+roomSearchResponses.getLockViewList().get(position).getLock().getData().getLockMac());
@@ -256,7 +279,7 @@ public class ConnectDeviceActivity extends BaseActivity implements View.OnClickL
        @Override
        public void onFoundDevice(ExtendedBluetoothDevice extendedBluetoothDevice) {
 
-           Log.e(TAG,"onFoundDevice = "+extendedBluetoothDevice.getAddress());
+//           Log.e(TAG,"onFoundDevice = "+extendedBluetoothDevice.getAddress());
            updateDevice(extendedBluetoothDevice);
 
        }
@@ -276,6 +299,7 @@ public class ConnectDeviceActivity extends BaseActivity implements View.OnClickL
                     +"\nlockData.getData().getAdminPwd() = "+lockData.getData().getAdminPwd()+"\n lockData.getData().getLockKey()="+lockData.getData().getLockKey()
                 +"\nlockData.getData().getLockFlagPos() = "+lockData.getData().getLockFlagPos()+"\npassword ="+password
                 +"\nlockData.getData().getAesKeyStr() ="+lockData.getData().getAesKeyStr());
+
 
                 ttLockAPI.deleteOneKeyboardPassword(extendedBluetoothDevice,uid,lockData.getData().getLockVersion(),
                         lockData.getData().getAdminPwd(),lockData.getData().getLockKey(),
@@ -407,15 +431,18 @@ public class ConnectDeviceActivity extends BaseActivity implements View.OnClickL
            Log.e(TAG,"onDeleteOneKeyboardPassword"+error);
            if (error == Error.SUCCESS){
 //               //TODO 向后台传传重置密码和时间
+               Log.e(TAG,"devices"+extendedBluetoothDevice.getAddress());
+               devices.remove(positionId);
+               roomSearchResponses.getLockViewList().remove(positionId);
 
-               devices.remove(extendedBluetoothDevice);
+               ttLockAPI.disconnect();
                if (devices.size() == 0){
+                   showBle();
                    DeletePassword();
-               }else{
-
-                   myDeviceRecyclerViewAdapter.notifyDataSetChanged();
                }
-
+              else{
+                    showBle();
+               }
 
 //               ttLockAPI.setLockTime(null, uid, lockResponsesBean.getData().getLockVersion(), lockResponsesBean.getData().getLockKey(), System.currentTimeMillis(), lockResponsesBean.getData().getLockFlagPos(), lockResponsesBean.getData().getAesKeyStr(), lockResponsesBean.getData().getTimezoneRawOffset());
 
@@ -696,7 +723,7 @@ public class ConnectDeviceActivity extends BaseActivity implements View.OnClickL
 
     private void DeletePassword(){
         ApiNet apiNet = new ApiNet();
-        apiNet.ApiDeletePs(roomSearchResponses.getHouse().getId())
+        apiNet.ApiDeletePs(roomSearchResponses.getRoomId())
                 .subscribe(new Observer<ChangeStateResetResponses>() {
                     @Override
                     public void onSubscribe(Disposable d) {
@@ -731,6 +758,9 @@ public class ConnectDeviceActivity extends BaseActivity implements View.OnClickL
     }
 
 
+//    private void showHint(){
+//        new R
+//    }
 
 
     private  void startAlertDialog(String title, String negative, String positive, final int position){

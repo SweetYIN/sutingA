@@ -73,6 +73,20 @@ public class PasswordFragment extends Fragment implements BGARefreshLayout.BGARe
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        houseInfos.clear();
+        requestData();
+        Log.e(TAG,"onResume");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.e(TAG,"onPause");
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -83,6 +97,8 @@ public class PasswordFragment extends Fragment implements BGARefreshLayout.BGARe
         return view;
 
     }
+
+
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -100,9 +116,10 @@ public class PasswordFragment extends Fragment implements BGARefreshLayout.BGARe
                 +"isVisible" +isVisible());
 //        super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser && isVisible()) {//视图可见并且控件准备好了，每次都会调用
-            if ( houseInfos.size() == 0) {//如果数据为空了，则需要重新联网请求
+//            if ( houseInfos.size() == 0) {//如果数据为空了，则需要重新联网请求
+            houseInfos.clear();
                 requestData();
-            }
+//            }
         }
     }
 
@@ -134,9 +151,9 @@ public class PasswordFragment extends Fragment implements BGARefreshLayout.BGARe
         public void ItemOnClick(View v, int position) {
             Intent intent = new Intent(mContext, ConnectDeviceActivity.class);
             intent.putExtra("type","2");
-//            intent.putExtra("roomId",houseInfos.get(position).getLock().getId());
+
             intent.putExtra("roomSearchResponses",houseInfos.get(position));
-//            intent.putExtra("roomId",23);
+
             startActivity(intent);
         }
 

@@ -28,6 +28,7 @@ public class RoomSearchResponses implements Serializable {
     private int numberPerson;
     private int price;
     private int priceHigh;
+    private int roomId;
     private String state;
     private List<LockViewListBean> lockViewList;
 
@@ -85,6 +86,14 @@ public class RoomSearchResponses implements Serializable {
 
     public void setPriceHigh(int priceHigh) {
         this.priceHigh = priceHigh;
+    }
+
+    public int getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(int roomId) {
+        this.roomId = roomId;
     }
 
     public String getState() {

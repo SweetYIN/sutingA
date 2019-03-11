@@ -2,6 +2,7 @@ package com.example.yinshengnan.suting_a.sn.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +13,12 @@ import com.example.yinshengnan.suting_a.R;
 import com.example.yinshengnan.suting_a.sn.callback.ClickCallback;
 import com.ttlock.bl.sdk.scanner.ExtendedBluetoothDevice;
 
+import java.nio.file.Path;
 import java.util.List;
 
 public class MyDeviceRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private String TAG = "MyDeviceRecyclerViewAdapter";
 
     private Context mContext;
 
@@ -29,6 +32,7 @@ public class MyDeviceRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         mContext = context;
         this.mLeDevices = mLeDevices;
         this.mType = type;
+        Log.e(TAG,"mLeDevices.size() = "+mLeDevices.size());
     }
     public void  setClickCallback(ClickCallback clickCallback){
         this.mClickCallback = clickCallback;
@@ -60,6 +64,7 @@ public class MyDeviceRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
     @Override
     public int getItemCount() {
+
         return mLeDevices.size() ;
     }
 
