@@ -102,7 +102,7 @@ public class HouseResourceActivity extends BaseActivity implements View.OnClickL
     private ClickCallback mClickCallback = new ClickCallback() {
         @Override
         public void ItemOnClick(View v, int position) {
-            openActivity2(houseInfos.get(position).getHouse().getId());
+            openActivity2(houseInfos.get(position).getRoomId());
         }
 
         @Override
