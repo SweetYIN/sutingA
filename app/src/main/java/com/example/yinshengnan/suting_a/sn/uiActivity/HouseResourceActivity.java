@@ -2,7 +2,6 @@ package com.example.yinshengnan.suting_a.sn.uiActivity;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,10 +12,8 @@ import android.widget.TextView;
 
 
 import com.example.yinshengnan.suting_a.R;
-import com.example.yinshengnan.suting_a.sn.adapter.MyRoomSearchViewAdapter;
-import com.example.yinshengnan.suting_a.sn.bean.Request.HouseSearchRequestBean;
-import com.example.yinshengnan.suting_a.sn.bean.Request.RoomSearchRequest;
-import com.example.yinshengnan.suting_a.sn.bean.Responds.RoomSearchResponses;
+import com.example.yinshengnan.suting_a.sn.adapter.BindRoomSearchListAdapter;
+import com.example.yinshengnan.suting_a.sn.bean.Responds.BindRoomSearchListResponses;
 import com.example.yinshengnan.suting_a.sn.callback.ClickCallback;
 import com.example.yinshengnan.suting_a.sn.network.ApiNet;
 import com.example.yinshengnan.suting_a.sn.view.DefineOtherStylesBAGRefreshWithLoadView;
@@ -40,9 +37,9 @@ public class HouseResourceActivity extends BaseActivity implements View.OnClickL
     private BGARefreshLayout mBgaRefreshLayout;
 
     private DefineOtherStylesBAGRefreshWithLoadView mDefineBAGRefreshWithLoadView;
-    private MyRoomSearchViewAdapter myRecyclerViewAdapter;
+    private BindRoomSearchListAdapter myRecyclerViewAdapter;
 
-    private List<RoomSearchResponses> houseInfos = new ArrayList<>();
+    private List<BindRoomSearchListResponses> houseInfos = new ArrayList<>();
 
     private Button btnBack;
 
@@ -89,7 +86,7 @@ public class HouseResourceActivity extends BaseActivity implements View.OnClickL
         //设置布局
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
-        myRecyclerViewAdapter = new MyRoomSearchViewAdapter(5,this,houseInfos);
+        myRecyclerViewAdapter = new BindRoomSearchListAdapter(this,houseInfos);
         myRecyclerViewAdapter.setClickCallback(mClickCallback);
         recyclerView.setAdapter(myRecyclerViewAdapter);
     }
@@ -102,7 +99,7 @@ public class HouseResourceActivity extends BaseActivity implements View.OnClickL
     private ClickCallback mClickCallback = new ClickCallback() {
         @Override
         public void ItemOnClick(View v, int position) {
-            openActivity2(houseInfos.get(position).getRoomId());
+            openActivity2(houseInfos.get(position).getId());
         }
 
         @Override
@@ -179,11 +176,11 @@ public class HouseResourceActivity extends BaseActivity implements View.OnClickL
         }
     };
 
-    private void openActivity(int houseId){
-        Intent intent = new Intent(this,HouseActivity.class);
-        intent.putExtra("houseId",houseId);
-        startActivity(intent);
-    }
+//    private void openActivity(int houseId){
+//        Intent intent = new Intent(this,HouseActivity.class);
+//        intent.putExtra("houseId",houseId);
+//        startActivity(intent);
+//    }
 
     private void openActivity2(int id){
 //        Intent  intent = new Intent(this, MainActivity.class);
@@ -206,18 +203,17 @@ public class HouseResourceActivity extends BaseActivity implements View.OnClickL
      */
     private void requestData(){
         showProgressDialog();
-        RoomSearchRequest roomSearchRequest = new RoomSearchRequest();
-        roomSearchRequest.setRoomState("CONFIGURATION");
+
         ApiNet apiNet = new ApiNet();
-        apiNet.ApiRoomSearch(roomSearchRequest)
-                .subscribe(new Observer<List<RoomSearchResponses>>() {
+        apiNet.ApiRoomSearch()
+                .subscribe(new Observer<List<BindRoomSearchListResponses>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(List<RoomSearchResponses> value) {
+                    public void onNext(List<BindRoomSearchListResponses> value) {
                         cancelProgressDialog();
                         Log.e(TAG,"value = "+value.size());
                         houseInfos.addAll(value) ;
@@ -239,16 +235,7 @@ public class HouseResourceActivity extends BaseActivity implements View.OnClickL
                 });
     }
 
-    private HouseSearchRequestBean getRequestDate(){
-        HouseSearchRequestBean resourcesRequestBean  = new HouseSearchRequestBean();
-        HouseSearchRequestBean.PagingBean pagingBean = new HouseSearchRequestBean.PagingBean();
-        pagingBean.setNumber(PAGE);
-        pagingBean.setSize(10);
-        resourcesRequestBean.setPaging(pagingBean);
-        resourcesRequestBean.setRoomState("CONFIGURATION");//正式字段
-//        resourcesRequestBean.setRoomState("READY");//测试字段
-        return resourcesRequestBean;
-    }
+
 
 
 }

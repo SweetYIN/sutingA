@@ -3,15 +3,14 @@ package com.example.yinshengnan.suting_a.sn.network;
 
 import android.util.Log;
 
-
 import com.example.yinshengnan.suting_a.sn.bean.Request.LockFormRequest;
-import com.example.yinshengnan.suting_a.sn.bean.Request.RoomSearchRequest;
+import com.example.yinshengnan.suting_a.sn.bean.Responds.BindRoomSearchListResponses;
 import com.example.yinshengnan.suting_a.sn.bean.Responds.ChangeStateResetResponses;
-import com.example.yinshengnan.suting_a.sn.bean.Responds.HouseSearchResponsesBean;
-import com.example.yinshengnan.suting_a.sn.bean.Responds.LockResponsesBean;
+import com.example.yinshengnan.suting_a.sn.bean.Responds.CheckRoomSearchListResponses;
+import com.example.yinshengnan.suting_a.sn.bean.Responds.DelectPsRoomSearchListResponses;
 import com.example.yinshengnan.suting_a.sn.bean.Responds.LoginResponsesBean;
-import com.example.yinshengnan.suting_a.sn.bean.Responds.RoomSearchResponses;
 import com.example.yinshengnan.suting_a.sn.bean.Responds.UserInfoResponses;
+import com.ttlock.bl.sdk.entity.LockData;
 
 import java.util.List;
 
@@ -44,35 +43,36 @@ public class ApiNet extends BaseNet{
                 });
     }
 
-    public Observable<String> ApiLoginSelect(){
-        return observe(mNetInterface.LoginSelect(HttpUrlConfig.LoginSelect))
-                .map(new Function<String, String>() {
+    /**未绑定房间列表**/
+    public Observable<List<BindRoomSearchListResponses>> ApiRoomSearch(){
+        return observe(mNetInterface.RoomSearch())
+                .map(new Function<List<BindRoomSearchListResponses>, List<BindRoomSearchListResponses>>() {
                     @Override
-                    public String apply(String s) throws Exception {
-                        return s;
+                    public List<BindRoomSearchListResponses> apply(List<BindRoomSearchListResponses> roomSearchResponses) throws Exception {
+                        return roomSearchResponses;
+                    }
+                });
+
+    }
+
+    /**绑定锁**/
+    public Observable<ChangeStateResetResponses> ApiBindForApp(int id, LockFormRequest data){
+        return observe(mNetInterface.BindForApp(HttpUrlConfig.Room+id+HttpUrlConfig.BindForApp,data))
+                .map(new Function<ChangeStateResetResponses, ChangeStateResetResponses>() {
+                    @Override
+                    public ChangeStateResetResponses apply(ChangeStateResetResponses changeStateResetResponses) throws Exception {
+                        return changeStateResetResponses;
                     }
                 });
     }
 
-    /**房源**/
-    public Observable<HouseSearchResponsesBean> ApiHouseSearch(RoomSearchRequest roomSearchRequest){
-        return  observe(mNetInterface.HouseSearch(roomSearchRequest))
-               .map(new Function<HouseSearchResponsesBean, HouseSearchResponsesBean>() {
-                   @Override
-                   public HouseSearchResponsesBean apply(HouseSearchResponsesBean houseSearchResponsesBean) throws Exception {
-                       return houseSearchResponsesBean;
-                   }
-               });
-
-    }
-
-    /**房间**/
-    public Observable<List<RoomSearchResponses>> ApiRoomSearch(RoomSearchRequest roomSearchRequest){
-        return observe(mNetInterface.RoomSearch(roomSearchRequest))
-                .map(new Function<List<RoomSearchResponses>, List<RoomSearchResponses>>() {
+    /**查房房间列表**/
+    public Observable<List<CheckRoomSearchListResponses>> ApiCheckRoomSearch(){
+        return observe(mNetInterface.CheckRoomSearch())
+                .map(new Function<List<CheckRoomSearchListResponses>, List<CheckRoomSearchListResponses>>() {
                     @Override
-                    public List<RoomSearchResponses> apply(List<RoomSearchResponses> roomSearchResponses) throws Exception {
-                        return roomSearchResponses;
+                    public List<CheckRoomSearchListResponses> apply(List<CheckRoomSearchListResponses> checkRoomSearchListResponses) throws Exception {
+                        return checkRoomSearchListResponses;
                     }
                 });
 
@@ -82,7 +82,7 @@ public class ApiNet extends BaseNet{
 
     /**查房**/
     public Observable<ChangeStateResetResponses> ApiChangeStateCheck(int roomId){
-        return observe(mNetInterface.ChangeStateCheck(HttpUrlConfig.ChangeStateCheck+roomId))
+        return observe(mNetInterface.CheckRoom(HttpUrlConfig.Room+roomId+ HttpUrlConfig.ChangeStateCheck))
                 .map(new Function<ChangeStateResetResponses, ChangeStateResetResponses>() {
                     @Override
                     public ChangeStateResetResponses apply(ChangeStateResetResponses changeStateResetResponses) throws Exception {
@@ -91,10 +91,23 @@ public class ApiNet extends BaseNet{
                 });
     }
 
+    /**删除密码房间列表**/
+    public Observable<List<DelectPsRoomSearchListResponses>> ApiDeletePasswordRoomSearch(){
+        return observe(mNetInterface.DeletePasswordRoomSearch())
+                .map(new Function<List<DelectPsRoomSearchListResponses>, List<DelectPsRoomSearchListResponses>>() {
+                    @Override
+                    public List<DelectPsRoomSearchListResponses> apply(List<DelectPsRoomSearchListResponses> roomSearchResponses) throws Exception {
+                        return roomSearchResponses;
+                    }
+                });
+
+    }
 
     /**删除密码**/
-    public Observable<ChangeStateResetResponses> ApiDeletePs(int roomId){
-        return observe(mNetInterface.DeletePassword(HttpUrlConfig.DeletePassword+roomId))
+    public Observable<ChangeStateResetResponses> ApiDeletePs(int roomId,int keyboardPwdId,
+                                                             int electricQuantity,
+                                                             Long timeStamp){
+        return observe(mNetInterface.DeletePassword(HttpUrlConfig.DeletePassword+roomId,keyboardPwdId,electricQuantity,timeStamp))
                 .map(new Function<ChangeStateResetResponses, ChangeStateResetResponses>() {
                     @Override
                     public ChangeStateResetResponses apply(ChangeStateResetResponses changeStateResetResponses) throws Exception {
@@ -103,17 +116,19 @@ public class ApiNet extends BaseNet{
                 });
     }
 
+    /**改变房间状态**/
+    public Observable<ChangeStateResetResponses> ApiChangeRoomState(int roomId){
+        return observe(mNetInterface.ChangeRoomState(HttpUrlConfig.Room+roomId+HttpUrlConfig.CheckRoomState)
+                .map(new Function<ChangeStateResetResponses, ChangeStateResetResponses>() {
+                    @Override
+                    public ChangeStateResetResponses apply(ChangeStateResetResponses changeStateResetResponses) throws Exception {
+                        return changeStateResetResponses;
+                    }
+                }));
 
-    /**绑定锁**/
-    public Observable<ChangeStateResetResponses> ApiBindForApp(int id, LockFormRequest lockFormRequest){
-            return observe(mNetInterface.BindForApp(HttpUrlConfig.BindForApp+id,lockFormRequest))
-                    .map(new Function<ChangeStateResetResponses, ChangeStateResetResponses>() {
-                        @Override
-                        public ChangeStateResetResponses apply(ChangeStateResetResponses changeStateResetResponses) throws Exception {
-                            return changeStateResetResponses;
-                        }
-                    });
     }
+
+
     /**用户信息**/
     public Observable<UserInfoResponses> ApiUserInfo(){
         return observe(mNetInterface.UserInfo(HttpUrlConfig.UserInfo))
@@ -125,7 +140,7 @@ public class ApiNet extends BaseNet{
                 });
     }
 
-    /**修改密码**/
+    /**修改用户密码**/
     public Observable<String> ApiModifyPassword(String account,String password){
         return observe(mNetInterface.ModifyPassword(HttpUrlConfig.modifyPassword,account,password))
                 .map(new Function<String, String>() {
@@ -136,13 +151,4 @@ public class ApiNet extends BaseNet{
                 });
     }
 
-    public Observable<LockResponsesBean> ApiRequestLockData(int id){
-        return observe(mNetInterface.requesLockInfot(HttpUrlConfig.LockBean+id))
-                .map(new Function<LockResponsesBean, LockResponsesBean>() {
-                    @Override
-                    public LockResponsesBean apply(LockResponsesBean lockResponsesBean) throws Exception {
-                        return lockResponsesBean;
-                    }
-                });
-    }
 }

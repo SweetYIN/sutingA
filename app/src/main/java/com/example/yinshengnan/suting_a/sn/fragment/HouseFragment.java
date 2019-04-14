@@ -17,11 +17,9 @@ import android.widget.Toast;
 
 
 import com.example.yinshengnan.suting_a.R;
-import com.example.yinshengnan.suting_a.sn.adapter.MyRoomSearchViewAdapter;
-import com.example.yinshengnan.suting_a.sn.bean.Request.HouseSearchRequestBean;
-import com.example.yinshengnan.suting_a.sn.bean.Request.RoomSearchRequest;
+import com.example.yinshengnan.suting_a.sn.adapter.CheckRoomSearchListAdapter;
 import com.example.yinshengnan.suting_a.sn.bean.Responds.ChangeStateResetResponses;
-import com.example.yinshengnan.suting_a.sn.bean.Responds.RoomSearchResponses;
+import com.example.yinshengnan.suting_a.sn.bean.Responds.CheckRoomSearchListResponses;
 import com.example.yinshengnan.suting_a.sn.callback.ClickCallback;
 import com.example.yinshengnan.suting_a.sn.callback.TabBadgeClickCallback;
 import com.example.yinshengnan.suting_a.sn.network.ApiNet;
@@ -46,13 +44,13 @@ public class HouseFragment extends Fragment implements BGARefreshLayout.BGARefre
     private RecyclerView recyclerView;
 
 //    private  MyRecyclerViewAdapter  myRecyclerViewAdapter;
-    private MyRoomSearchViewAdapter myRecyclerViewAdapter;
+    private CheckRoomSearchListAdapter myRecyclerViewAdapter;
 
     private DefineOtherStylesBAGRefreshWithLoadView mDefineBAGRefreshWithLoadView;
 
 //   private List<HouseSearchResponsesBean.DataBean> houseInfos = new ArrayList<>() ;
 
-    private List<RoomSearchResponses> houseInfos = new ArrayList<>();
+    private List<CheckRoomSearchListResponses> houseInfos = new ArrayList<>();
     private ApiNet apiNet ;
 
     private int ALLSUM ;
@@ -107,7 +105,7 @@ public class HouseFragment extends Fragment implements BGARefreshLayout.BGARefre
         //设置布局
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
         recyclerView.setLayoutManager(linearLayoutManager);
-        myRecyclerViewAdapter = new MyRoomSearchViewAdapter(1,mContext,houseInfos);
+        myRecyclerViewAdapter = new CheckRoomSearchListAdapter(mContext,houseInfos);
         myRecyclerViewAdapter.setClickCallback(mClickCallback);
         recyclerView.setAdapter(myRecyclerViewAdapter);
 
@@ -116,7 +114,8 @@ public class HouseFragment extends Fragment implements BGARefreshLayout.BGARefre
     private ClickCallback mClickCallback = new ClickCallback() {
         @Override
         public void ItemOnClick(View v, int position) {
-            uploadData(houseInfos.get(position).getRoomId());
+
+            uploadData(houseInfos.get(position).getId());
         }
 
         @Override
@@ -214,18 +213,17 @@ public class HouseFragment extends Fragment implements BGARefreshLayout.BGARefre
      * 请求房源
      */
     private void requestData(){
-        RoomSearchRequest roomSearchRequest = new RoomSearchRequest();
-        roomSearchRequest.setRoomState("LEASING");
+
         apiNet = new ApiNet();
-        apiNet.ApiRoomSearch(roomSearchRequest)
-                .subscribe(new Observer<List<RoomSearchResponses>>() {
+        apiNet.ApiCheckRoomSearch()
+                .subscribe(new Observer<List<CheckRoomSearchListResponses>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
                     }
 
-                    @Override
-                    public void onNext(List<RoomSearchResponses> value) {
+
+                    public void onNext(List<CheckRoomSearchListResponses> value) {
                         houseInfos.clear();
                         houseInfos.addAll(value) ;
                         myRecyclerViewAdapter.notifyDataSetChanged();
@@ -260,7 +258,7 @@ public class HouseFragment extends Fragment implements BGARefreshLayout.BGARefre
 
                     @Override
                     public void onNext(ChangeStateResetResponses value) {
-                        if ("SUCCESS".equals(value.getStatus())){
+                        if (value.getCode() == 200){
                             toast("查房成功");
                             try {
                                 Thread.sleep(1000);
@@ -286,15 +284,7 @@ public class HouseFragment extends Fragment implements BGARefreshLayout.BGARefre
                 });
 
     }
-    private HouseSearchRequestBean getRequestDate(){
-        HouseSearchRequestBean resourcesRequestBean  = new HouseSearchRequestBean();
-        HouseSearchRequestBean.PagingBean pagingBean = new HouseSearchRequestBean.PagingBean();
-        pagingBean.setNumber(PAGE);
-        pagingBean.setSize(10);
-        resourcesRequestBean.setPaging(pagingBean);
-        resourcesRequestBean.setRoomState("LEASING"); //正式字段
-        return resourcesRequestBean;
-    }
+
     private void toast(String text){
         Toast.makeText(mContext,text,Toast.LENGTH_LONG).show();
     }

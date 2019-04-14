@@ -73,7 +73,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         String basic;
         if (!TextUtils.isEmpty(nameET.getText()) && !TextUtils.isEmpty(passWordET.getText())) {
 //            String authorization = nameET.getText().toString() +":" +passWordET.getText().toString();
-            String authorization = "android-c" + ":" + "wyTaK5gqpMVhEfWB8djf";
+            String authorization = "android-station" + ":" + "wyTaK5gqpMVhEfWB8djf";
             basic = "Basic " + Base64.encodeToString(authorization.getBytes(), Base64.NO_WRAP);
             loginRequestBean.setUsername(nameET.getText().toString());
             loginRequestBean.setPassword(passWordET.getText().toString());
@@ -117,38 +117,38 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 });
     }
 
-    private void uploadToken(String token) {
-        ApiNet apiNet = new ApiNet();
-        if (TextUtils.isEmpty(token)) {
-//            cancelProgressDialog();
-//            toast("登录失败");
-        } else {
-            apiNet.ApiLoginSelect()
-                    .subscribe(new Observer<String>() {
-                        @Override
-                        public void onSubscribe(Disposable d) {
-
-                        }
-
-                        @Override
-                        public void onNext(String value) {
-//                            cancelProgressDialog();
-                            openActivity();
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-
-                        }
-
-                        @Override
-                        public void onComplete() {
-
-                        }
-                    });
-        }
-
-    }
+//    private void uploadToken(String token) {
+//        ApiNet apiNet = new ApiNet();
+//        if (TextUtils.isEmpty(token)) {
+////            cancelProgressDialog();
+////            toast("登录失败");
+//        } else {
+//            apiNet.ApiLoginSelect()
+//                    .subscribe(new Observer<String>() {
+//                        @Override
+//                        public void onSubscribe(Disposable d) {
+//
+//                        }
+//
+//                        @Override
+//                        public void onNext(String value) {
+////                            cancelProgressDialog();
+//                            openActivity();
+//                        }
+//
+//                        @Override
+//                        public void onError(Throwable e) {
+//
+//                        }
+//
+//                        @Override
+//                        public void onComplete() {
+//
+//                        }
+//                    });
+//        }
+//
+//    }
 
 
     private void openActivity() {

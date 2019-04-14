@@ -58,6 +58,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         initTabList();
         badgeList();
         initView();
+
     }
     private void initFragment() {
         HouseFragment houseFragment = new HouseFragment();
@@ -161,7 +162,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
             }else{
                 //TODO REQUEST HTTP
                 Log.e(TAG,"query ="+query);
-                openActivity(query);
+//                openActivity(query);
             }
             return true;
         }
@@ -173,11 +174,11 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     };
 
 
-    private void openActivity( String query){
-        Intent intent = new Intent(this,CheckHouseResultActivity.class);
-        intent.putExtra("query",query);
-        startActivity(intent);
-    }
+//    private void openActivity( String query){
+//        Intent intent = new Intent(this,CheckHouseResultActivity.class);
+//        intent.putExtra("query",query);
+//        startActivity(intent);
+//    }
 
     @Override
     public void onData(int type, int count) {

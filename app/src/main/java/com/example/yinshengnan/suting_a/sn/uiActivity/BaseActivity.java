@@ -12,6 +12,7 @@ import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -83,6 +84,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public final void toast(final String msg) {
+
         if(Looper.getMainLooper() == Looper.myLooper())
             Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
         else {

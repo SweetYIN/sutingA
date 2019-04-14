@@ -18,10 +18,10 @@ import android.widget.Toast;
 
 
 import com.example.yinshengnan.suting_a.R;
-import com.example.yinshengnan.suting_a.sn.adapter.MyRoomSearchViewAdapter;
-import com.example.yinshengnan.suting_a.sn.bean.Request.HouseSearchRequestBean;
-import com.example.yinshengnan.suting_a.sn.bean.Request.RoomSearchRequest;
-import com.example.yinshengnan.suting_a.sn.bean.Responds.RoomSearchResponses;
+import com.example.yinshengnan.suting_a.sn.adapter.CheckRoomSearchListAdapter;
+import com.example.yinshengnan.suting_a.sn.adapter.DelectPsRoomSearchListAdapter;
+import com.example.yinshengnan.suting_a.sn.bean.Responds.CheckRoomSearchListResponses;
+import com.example.yinshengnan.suting_a.sn.bean.Responds.DelectPsRoomSearchListResponses;
 import com.example.yinshengnan.suting_a.sn.callback.ClickCallback;
 import com.example.yinshengnan.suting_a.sn.callback.TabBadgeClickCallback;
 import com.example.yinshengnan.suting_a.sn.network.ApiNet;
@@ -50,11 +50,9 @@ public class PasswordFragment extends Fragment implements BGARefreshLayout.BGARe
 
     private DefineOtherStylesBAGRefreshWithLoadView mDefineBAGRefreshWithLoadView;
 
-//    private  MyRecyclerViewAdapter  myRecyclerViewAdapter;
-    private MyRoomSearchViewAdapter myRecyclerViewAdapter;
+    private DelectPsRoomSearchListAdapter myRecyclerViewAdapter;
 
-//    private List<HouseSearchResponsesBean.DataBean> houseInfos = new ArrayList<>() ;
-    private List<RoomSearchResponses> houseInfos = new ArrayList<>();
+    private List<DelectPsRoomSearchListResponses> houseInfos = new ArrayList<>();
 
     private int ALLSUM ;
     //分页请求
@@ -76,7 +74,7 @@ public class PasswordFragment extends Fragment implements BGARefreshLayout.BGARe
     public void onResume() {
         super.onResume();
         houseInfos.clear();
-        requestData();
+//        requestData();
         Log.e(TAG,"onResume");
     }
 
@@ -140,7 +138,7 @@ public class PasswordFragment extends Fragment implements BGARefreshLayout.BGARe
         //设置布局
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
         recyclerView.setLayoutManager(linearLayoutManager);
-        myRecyclerViewAdapter = new MyRoomSearchViewAdapter(2,mContext,houseInfos);
+        myRecyclerViewAdapter = new DelectPsRoomSearchListAdapter(mContext,houseInfos);
         myRecyclerViewAdapter.setClickCallback(mClickCallback);
         recyclerView.setAdapter(myRecyclerViewAdapter);
     }
@@ -154,7 +152,7 @@ public class PasswordFragment extends Fragment implements BGARefreshLayout.BGARe
 
             intent.putExtra("roomSearchResponses",houseInfos.get(position));
 
-            startActivity(intent);
+           startActivity(intent);
         }
 
         @Override
@@ -226,29 +224,19 @@ public class PasswordFragment extends Fragment implements BGARefreshLayout.BGARe
     };
 
 
-    private HouseSearchRequestBean getRequestDate(){
-        HouseSearchRequestBean resourcesRequestBean  = new HouseSearchRequestBean();
-        HouseSearchRequestBean.PagingBean pagingBean = new HouseSearchRequestBean.PagingBean();
-        pagingBean.setNumber(1);
-        pagingBean.setSize(10);
-        resourcesRequestBean.setPaging(pagingBean);
-        resourcesRequestBean.setRoomState("CLEANING");
-        return resourcesRequestBean;
-    }
 
     private void requestData(){
-        RoomSearchRequest roomSearchRequest = new RoomSearchRequest();
-        roomSearchRequest.setRoomState("CLEANING");
+
         ApiNet apiNet = new ApiNet();
-        apiNet.ApiRoomSearch(roomSearchRequest)
-                .subscribe(new Observer<List<RoomSearchResponses>>() {
+        apiNet.ApiDeletePasswordRoomSearch()
+                .subscribe(new Observer<List<DelectPsRoomSearchListResponses>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(List<RoomSearchResponses> value) {
+                    public void onNext(List<DelectPsRoomSearchListResponses> value) {
                         houseInfos.addAll(value) ;
                         myRecyclerViewAdapter.notifyDataSetChanged();
                         tabBadgeClickCallback.onData(1,value.size());

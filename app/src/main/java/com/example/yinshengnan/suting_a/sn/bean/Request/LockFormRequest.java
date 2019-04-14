@@ -12,7 +12,7 @@ public class LockFormRequest {
      */
 
     private LockData data;
-    private String lockAlias;
+    private String name;
 
     public LockData getData() {
         return data;
@@ -22,13 +22,11 @@ public class LockFormRequest {
         this.data = data;
     }
 
-    public String getLockAlias() {
-        return lockAlias;
+    public String getName() {
+        return name;
     }
 
-    public void setLockAlias(String lockAlias) {
-        this.lockAlias = lockAlias;
+    public void setName(String name) {
+        this.name = name;
     }
-
-
 }

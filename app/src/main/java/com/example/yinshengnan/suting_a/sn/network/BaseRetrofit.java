@@ -48,7 +48,9 @@ public class BaseRetrofit {
 		builder.connectTimeout(DEFAULT_TIME_OUT, TimeUnit.SECONDS);//连接超时时间        builder.writeTimeout(DEFAULT_READ_TIME_OUT,TimeUnit.SECONDS);//写操作 超时时间
 		builder.readTimeout(DEFAULT_READ_TIME_OUT,TimeUnit.SECONDS);//读操作超时时间
 		builder.addNetworkInterceptor(logInterceptor);
-		builder.addInterceptor(new MyHttpInterceptor());
+//		if (HttpUrlConfig.ISLOGIN){
+				builder.addInterceptor(new MyHttpInterceptor());
+//		}
 		builder.addInterceptor(logInterceptor);
 
 

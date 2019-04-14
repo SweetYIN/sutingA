@@ -31,8 +31,6 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".sn.uiActivity.HouseResourceActivity" />
         <activity android:name=".sn.uiActivity.UserActivity" />
-        <activity android:name=".sn.uiActivity.HouseActivity" />
-        <activity android:name=".sn.uiActivity.CheckHouseResultActivity" />
         <activity android:name=".sn.uiActivity.ConnectDeviceActivity" />
         <activity android:name=".sn.uiActivity.ModifyPasswordActivity"></activity>
         <activity android:name=".sn.uiActivity.StartActivity"></activity>

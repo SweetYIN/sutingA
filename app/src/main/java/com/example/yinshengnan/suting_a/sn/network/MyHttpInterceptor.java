@@ -21,7 +21,9 @@ public class MyHttpInterceptor implements Interceptor {
         Request request;
         HttpUrl modifiedUrl = originalRequest.url().newBuilder()
                 // Provide your custom parameter here
+
                 .addQueryParameter("access_token", HttpUrlConfig.Token)
+
                 .build();
         request = originalRequest.newBuilder().url(modifiedUrl).build();
         return chain.proceed(request);
