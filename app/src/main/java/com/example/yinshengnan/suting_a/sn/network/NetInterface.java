@@ -65,8 +65,8 @@ public interface NetInterface {
 	Observable<List<DelectPsRoomSearchListResponses>> DeletePasswordRoomSearch();
 
 	/**s删除密码**/
-	@Headers({"Content-Type:application/json",
-			"response-wrap:true"})
+	@Headers({"response-wrap:true"})
+	@FormUrlEncoded
 	@POST
 	Observable<ChangeStateResetResponses> DeletePassword(@Url String url, @Field("keyboardPwdId") int keyboardPwdId,
 														 @Field("electricQuantity") int electricQuantity,
@@ -75,6 +75,7 @@ public interface NetInterface {
 	/**改锁状态**/
 	@Headers({"Content-Type:application/json",
 			"response-wrap:true"})
+
 	@POST
 	Observable<ChangeStateResetResponses> ChangeRoomState(@Url String url);
 
@@ -82,8 +83,8 @@ public interface NetInterface {
 
 	/**获取用户信息**/
 	@Headers("Content-Type:application/json")
-	@GET
-	Observable<UserInfoResponses> UserInfo(@Url String url) ;
+	@GET(HttpUrlConfig.UserInfo)
+	Observable<UserInfoResponses> UserInfo();
 
 
 	/**修改用户密码**/

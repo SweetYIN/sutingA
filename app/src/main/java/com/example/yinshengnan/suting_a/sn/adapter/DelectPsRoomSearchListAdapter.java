@@ -61,7 +61,7 @@ public class DelectPsRoomSearchListAdapter extends RecyclerView.Adapter<Recycler
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         DelectPsRoomSearchListResponses rommSearchResponses = mRoomList.get(position);
         final MyViewHolder myViewHolder = (MyViewHolder) holder;
-        myViewHolder.numberTV.setText("房源编号："+rommSearchResponses.getRoomView().getHouse().getName()+rommSearchResponses.getRoomView().getName());
+        myViewHolder.numberTV.setText(rommSearchResponses.getRoomView().getHouse().getName()+rommSearchResponses.getRoomView().getName());
         myViewHolder.addressTV.setText(rommSearchResponses.getRoomView().getHouse().getAddress());
         myViewHolder.typeTV.setText(rommSearchResponses.getRoomView().getHouse().getHouseType()+rommSearchResponses.getRoomView().getState());
         //roomSearchResponses.getHouse().getTopUrl()

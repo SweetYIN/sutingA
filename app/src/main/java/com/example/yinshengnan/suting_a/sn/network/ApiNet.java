@@ -131,13 +131,13 @@ public class ApiNet extends BaseNet{
 
     /**用户信息**/
     public Observable<UserInfoResponses> ApiUserInfo(){
-        return observe(mNetInterface.UserInfo(HttpUrlConfig.UserInfo))
+        return observe(mNetInterface.UserInfo()
                 .map(new Function<UserInfoResponses, UserInfoResponses>() {
                     @Override
                     public UserInfoResponses apply(UserInfoResponses userInfoResponses) throws Exception {
                         return userInfoResponses;
                     }
-                });
+                }));
     }
 
     /**修改用户密码**/

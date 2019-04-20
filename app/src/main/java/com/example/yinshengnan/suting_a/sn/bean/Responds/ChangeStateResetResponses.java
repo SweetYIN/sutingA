@@ -11,7 +11,7 @@ public class ChangeStateResetResponses {
      */
 
     private int code;
-    private DataBean data;
+//    private DataBean data;
     private String message;
     private String status;
 
@@ -23,13 +23,13 @@ public class ChangeStateResetResponses {
         this.code = code;
     }
 
-    public DataBean getData() {
-        return data;
-    }
-
-    public void setData(DataBean data) {
-        this.data = data;
-    }
+//    public DataBean getData() {
+//        return data;
+//    }
+//
+//    public void setData(DataBean data) {
+//        this.data = data;
+//    }
 
     public String getMessage() {
         return message;

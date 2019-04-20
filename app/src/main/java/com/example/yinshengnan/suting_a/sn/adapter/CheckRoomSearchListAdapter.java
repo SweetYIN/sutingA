@@ -60,7 +60,7 @@ public class CheckRoomSearchListAdapter extends RecyclerView.Adapter<RecyclerVie
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         CheckRoomSearchListResponses rommSearchResponses = mRoomList.get(position);
         final MyViewHolder myViewHolder = (MyViewHolder) holder;
-        myViewHolder.numberTV.setText("房源编号："+rommSearchResponses.getHouse().getName()+rommSearchResponses.getName());
+        myViewHolder.numberTV.setText(rommSearchResponses.getHouse().getName()+rommSearchResponses.getName());
         myViewHolder.addressTV.setText(rommSearchResponses.getHouse().getAddress());
         myViewHolder.typeTV.setText(rommSearchResponses.getHouse().getHouseType()+rommSearchResponses.getState());
         //roomSearchResponses.getHouse().getTopUrl()

@@ -47,7 +47,7 @@ public class HttpUrlConfig {
     public static final String CheckRoomState = "/change-state-clean";
 
     /**获取用户信息**/
-    public static final String UserInfo = "http://59.110.159.182:9030/principal";
+    public static final String UserInfo = "api/me";
 
     /**修改用户密码**/
     public static final String modifyPassword = "http://59.110.159.182:9030/password?";

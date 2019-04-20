@@ -40,7 +40,7 @@ import io.reactivex.disposables.Disposable;
  */
 public class PasswordFragment extends Fragment implements BGARefreshLayout.BGARefreshLayoutDelegate{
 
-    private static final String TAG = "HouseFragment";
+    private static final String TAG = "PasswordFragment";
     private Context mContext;
 
     private TabBadgeClickCallback tabBadgeClickCallback;
@@ -74,7 +74,7 @@ public class PasswordFragment extends Fragment implements BGARefreshLayout.BGARe
     public void onResume() {
         super.onResume();
         houseInfos.clear();
-//        requestData();
+        requestData();
         Log.e(TAG,"onResume");
     }
 
