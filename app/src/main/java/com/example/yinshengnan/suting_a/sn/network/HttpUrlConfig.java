@@ -53,7 +53,8 @@ public class HttpUrlConfig {
     public static final String modifyPassword = "http://59.110.159.182:9030/password?";
 
 
-
+    /**修改用户密码**/
+    public static final String BackLogin = "http://59.110.159.182:8040/revoke";
 
 
 

@@ -8,12 +8,15 @@ public class ChangeStateResetResponses {
      * data : {}
      * message : string
      * status : SUCCESS
+     *
+     *
      */
 
     private int code;
 //    private DataBean data;
     private String message;
     private String status;
+    private String result;
 
     public int getCode() {
         return code;
@@ -48,5 +51,13 @@ public class ChangeStateResetResponses {
     }
 
     public static class DataBean {
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
     }
 }

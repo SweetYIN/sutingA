@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,8 +14,10 @@ import android.widget.Toast;
 
 
 import com.example.yinshengnan.suting_a.R;
+import com.example.yinshengnan.suting_a.sn.bean.Responds.ChangeStateResetResponses;
 import com.example.yinshengnan.suting_a.sn.bean.Responds.UserInfoResponses;
 import com.example.yinshengnan.suting_a.sn.network.ApiNet;
+import com.example.yinshengnan.suting_a.sn.network.HttpUrlConfig;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
@@ -27,6 +30,7 @@ public class UserActivity extends BaseActivity implements View.OnClickListener{
 
     private TextView nickName_tv,userName_tv,password_tv,mobile_tv,email_tv,type_tv
             ,created_time_tv,updated_time_tv,group_tv,role_tv,salt_tv;
+    private Button btnBackLogin;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +49,9 @@ public class UserActivity extends BaseActivity implements View.OnClickListener{
         btnBack.setOnClickListener(this);
         modifyPasswordTB = (ImageButton) findViewById(R.id.tb_modifyPassword);
         modifyPasswordTB.setOnClickListener(this);
+
+        btnBackLogin = findViewById(R.id.btn_back_login);
+        btnBackLogin.setOnClickListener(this);
 
         nickName_tv = (TextView) findViewById(R.id.nickName_tv);
         userName_tv = (TextView) findViewById(R.id.userName_tv);
@@ -70,7 +77,7 @@ public class UserActivity extends BaseActivity implements View.OnClickListener{
 //        type_tv.setText(userInfoResponses.getType());
 //        created_time_tv.setText(userInfoResponses.getCreated());
 //        updated_time_tv.setText(userInfoResponses.getUpdated());
-        group_tv.setText("组名 ："+userInfoResponses.getGroup().getName());
+//        group_tv.setText("组名 ："+userInfoResponses.getGroup().getName());
 //        role_tv.setText(userInfoResponses.getRole().getName());
 //        salt_tv.setText(userInfoResponses.getSalt());
     }
@@ -84,6 +91,9 @@ public class UserActivity extends BaseActivity implements View.OnClickListener{
             case R.id.btn_back:
                 finish();
                 break;
+            case R.id.btn_back_login:
+                bankLogin();
+                break;
         }
     }
 
@@ -91,6 +101,40 @@ public class UserActivity extends BaseActivity implements View.OnClickListener{
     protected void onDestroy() {
         super.onDestroy();
         finish();
+    }
+
+    /**
+     * 退出登录
+     */
+    private void bankLogin(){
+        ApiNet apiNet = new ApiNet();
+        apiNet.ApiBackLogin()
+                .subscribe(new Observer<ChangeStateResetResponses>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(ChangeStateResetResponses value) {
+                        Log.e("aaaa","valude = "+value.getResult());
+                        if ("true".equals(value.getResult())) {
+                            HttpUrlConfig.Token = "";
+                            loginActivity();
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     /**请求用户信息**/
@@ -123,7 +167,11 @@ public class UserActivity extends BaseActivity implements View.OnClickListener{
                 });
     }
 
-
+    private void loginActivity(){
+        Intent intent = new Intent(this,LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
 
 }

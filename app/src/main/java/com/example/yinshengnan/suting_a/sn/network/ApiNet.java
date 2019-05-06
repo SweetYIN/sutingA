@@ -150,5 +150,15 @@ public class ApiNet extends BaseNet{
                     }
                 });
     }
+    /**用户信息**/
+    public Observable<ChangeStateResetResponses> ApiBackLogin(){
+        return observe(mNetInterface.BackLogin()
+                .map(new Function<ChangeStateResetResponses, ChangeStateResetResponses>() {
+                    @Override
+                    public ChangeStateResetResponses apply(ChangeStateResetResponses ChangeStateResetResponses) throws Exception {
+                        return ChangeStateResetResponses;
+                    }
+                }));
+    }
 
 }

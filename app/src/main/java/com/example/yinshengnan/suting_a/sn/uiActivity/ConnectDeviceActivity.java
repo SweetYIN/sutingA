@@ -273,6 +273,9 @@ public class ConnectDeviceActivity extends BaseActivity implements View.OnClickL
                         lockData.getAdminPwd(),lockData.getLockKey(),
                         lockData.getLockFlagPos(),3,password,lockData.getAesKeyStr());
 
+               // 测试
+//               ttLockAPI.getLockTime(extendedBluetoothDevice, lockData.getLockVersion(),lockData.getAesKeyStr(), lockData.getTimezoneRawOffset());
+
             }
 
 
@@ -342,24 +345,27 @@ public class ConnectDeviceActivity extends BaseActivity implements View.OnClickL
 
        @Override
        public void onSetLockTime(ExtendedBluetoothDevice extendedBluetoothDevice, Error error) {
+           Log.e(TAG,"onSetLockTime = "+error);
            if (error == Error.SUCCESS){
                Log.e(TAG,"onSetLockTime");
                ttLockAPI.getLockTime(extendedBluetoothDevice, lockData.getLockVersion(),lockData.getAesKeyStr(), lockData.getTimezoneRawOffset());
-               toast("时间校准成功");
+//               toast("时间校准成功");
            }else{
-               toast("时间校准失败");
+               toast("时间校准失败" +error.getErrorMsg());
            }
 
        }
 
        @Override
        public void onGetLockTime(ExtendedBluetoothDevice extendedBluetoothDevice, long l, Error error) {
+           Log.e(TAG,"onSetLockTime = "+error);
            if (error == Error.SUCCESS){
                timeStamp = l;
+               Log.e(TAG,"timeStamp = "+timeStamp);
                ttLockAPI.getElectricQuantity(extendedBluetoothDevice, lockData.getLockVersion(),lockData.getAesKeyStr());
-               toast("获取当前时间成功");
+//               toast("获取当前时间成功");
            }else{
-               toast("获取锁时间失败");
+               toast("获取锁时间失败" +error.getErrorMsg()) ;
            }
 
        }
@@ -396,17 +402,17 @@ public class ConnectDeviceActivity extends BaseActivity implements View.OnClickL
 
        @Override
        public void onDeleteOneKeyboardPassword(ExtendedBluetoothDevice extendedBluetoothDevice, int i, String s, Error error) {
-           Log.e(TAG,"onDeleteOneKeyboardPassword"+error+"s");
+           Log.e(TAG,"onDeleteOneKeyboardPassword"+error+"\ns");
            if (error == Error.SUCCESS){
 //               //TODO 向后台传传重置密码和时间
                Log.e(TAG,"devices"+extendedBluetoothDevice.getAddress());
-               ttLockAPI.setLockTime(null, uid, lockData.getLockVersion(), lockData.getLockKey(), System.currentTimeMillis(), lockData.getLockFlagPos(),
+               ttLockAPI.setLockTime(extendedBluetoothDevice, uid, lockData.getLockVersion(), lockData.getLockKey(), System.currentTimeMillis(), lockData.getLockFlagPos(),
                        lockData.getAesKeyStr(), lockData.getTimezoneRawOffset());
 //
 
 //
            }else{
-               toast("删除设备密码失败");
+               toast("删除设备密码失败" +error.getErrorMsg());
            }
        }
 
@@ -562,20 +568,17 @@ public class ConnectDeviceActivity extends BaseActivity implements View.OnClickL
 
        @Override
        public void onGetElectricQuantity(ExtendedBluetoothDevice extendedBluetoothDevice, int i, Error error) {
+           Log.e(TAG,"onSetLockTime = "+error);
            if (error == Error.SUCCESS){
+
                electricQuantity = i;
+               Log.e(TAG,"electricQuantity = "+electricQuantity);
                //TODO 获取电量
                DeletePassword();
 
-               if (devices.size() == 0){
-                   showBle();
-                   ChangeRoomState();
-               }
-               else{
-                   showBle();
-               }
+
            }else{
-               toast("获取电量失败");
+               toast("获取电量失败" + error.getErrorMsg());
            }
 
        }
@@ -714,11 +717,20 @@ public class ConnectDeviceActivity extends BaseActivity implements View.OnClickL
                     @Override
                     public void onNext(ChangeStateResetResponses value) {
                         cancelProgressDialog();
-                        if ("200".equals(value.getCode())){
+                        Log.e(TAG,"value= " +value.getCode());
+                        if ( value.getCode() == 200){
                             devices.remove(positionId);
                             roomSearchResponses.getLockViewList().remove(positionId);
                             ttLockAPI.disconnect();
                             toast("删除密码成功");
+                            Log.e(TAG,"devices.size() = " +devices.size());
+                            if (devices.size() == 0){
+                                showBle();
+                                ChangeRoomState();
+                            }
+                            else{
+                                showBle();
+                            }
                         }else{
                             ttLockAPI.disconnect();
                             toast("删除密码失败 "+value.getCode());
@@ -753,8 +765,8 @@ public class ConnectDeviceActivity extends BaseActivity implements View.OnClickL
 
                     @Override
                     public void onNext(ChangeStateResetResponses value) {
-                        if ("200".equals(value.getCode())){
-
+                        if (value.getCode() == 200){
+                                finish();
                             toast("状态改变成功");
                         }else{
                             ttLockAPI.disconnect();

@@ -93,6 +93,10 @@ public interface NetInterface {
 	Observable<String> ModifyPassword(@Url String url, @Field("account") String account,
                                       @Field("password") String password) ;
 
-
+	/**获取用户信息**/
+	@Headers({"Content-Type:application/json",
+			"response-wrap:true"})
+	@POST(HttpUrlConfig.BackLogin)
+	Observable<ChangeStateResetResponses> BackLogin();
 
 }

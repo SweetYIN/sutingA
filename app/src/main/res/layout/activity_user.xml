@@ -105,7 +105,7 @@
         android:layout_height="45dp"
         android:background="@drawable/coner"
         android:padding="10dp"
-
+        android:visibility="gone"
         android:textSize="16sp"
         android:text="组名"
         />
@@ -128,6 +128,19 @@
         android:visibility="gone"
         android:textSize="16sp"
         android:text="salt"
+        />
+
+    <Button
+        android:id="@+id/btn_back_login"
+        android:background="@drawable/guide_button_bg"
+        android:layout_marginTop="38dp"
+        android:text="退出登录"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:layout_width="313dp"
+        android:layout_height="44dp"
+        android:layout_gravity="center"
+
         />
 
 </LinearLayout>
